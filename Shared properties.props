@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <SharedPath>$(SolutionDir)\Shared Libraries</SharedPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>OpenGL additional path</_PropertySheetDisplayName>
+    <OutDir>$(SolutionDir)\build\$(Platform)-$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(OutDir)\obj\</IntDir>
+    <IncludePath>$(SharedPath)\freeglut-2.8.1\include;$(SharedPath)\glew-1.12.0\include;$(SharedPath)\glm-0.9.6.1;$(SharedPath)\soil-july2008\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SharedPath)\freeglut-2.8.1\lib\$(Platform);$(SharedPath)\glew-1.12.0\lib\Release\$(Platform);$(SharedPath)\soil-july2008\lib\$(Configuration)-$(Platform);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <PreBuildEvent>
+      <Command>
+        cd "$(SharedPath)"
+        get-dependencies
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+        copy "$(SharedPath)\freeglut-2.8.1\bin\$(Platform)\freeglut.dll" "$(OutDir)" &gt; nul
+        copy "$(SharedPath)\glew-1.12.0\bin\Release\$(Platform)\glew32.dll" "$(OutDir)" &gt; nul
+        echo Post build: Copied libraries.
+
+        xcopy /e /y "$(ProjectDir)\src\shaders" "$(OutDir)\shaders\" &gt; nul
+        echo Post build: Copied shaders.
+
+        xcopy /e /y "$(ProjectDir)\assets" "$(OutDir)\assets\" &gt; nul
+        echo Post build: Copied assets.
+      </Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="SharedPath">
+      <Value>$(SharedPath)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
