@@ -72,7 +72,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engines\GLEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ui\GLApplication.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\engines\GLEngine.h" />
+    <ClInclude Include="src\ui\GLApplication.h" />
+    <ClInclude Include="src\util\glassert.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
