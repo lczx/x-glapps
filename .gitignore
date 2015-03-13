@@ -1,0 +1,28 @@
+# Ignore Visual Studio temporary files and outputs
+
+# User properties contain debug configuration, do not delete
+# /*/*.vcxproj.user
+*.suo
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+x64/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+
+# Downloaded dependencies
+"Shared Libraries/*"
+!"Shared Libraries/get-dependencies.cmd"
+!"Shared Libraries/soil-binaries.win.tgz"
