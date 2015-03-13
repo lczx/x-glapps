@@ -23,6 +23,6 @@ ipch/
 *.cachefile
 
 # Downloaded dependencies
-"Shared Libraries/*"
-!"Shared Libraries/get-dependencies.cmd"
-!"Shared Libraries/soil-binaries.win.tgz"
+Shared\ Libraries/*
+!Shared\ Libraries/get-dependencies.cmd
+!Shared\ Libraries/soil-binaries.win.tgz

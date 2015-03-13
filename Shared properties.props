@@ -24,14 +24,19 @@
         copy "$(SharedPath)\glew-1.12.0\bin\Release\$(Platform)\glew32.dll" "$(OutDir)" &gt; nul
         echo Post build: Copied libraries.
 
-        xcopy /e /y "$(ProjectDir)\src\shaders" "$(OutDir)\shaders\" &gt; nul
-        echo Post build: Copied shaders.
+        if exist "$(ProjectDir)\src\shaders" (
+            xcopy /e /y "$(ProjectDir)\src\shaders" "$(OutDir)\shaders\" &gt; nul
+            echo Post build: Copied shaders.
+        )
 
-        xcopy /e /y "$(ProjectDir)\assets" "$(OutDir)\assets\" &gt; nul
-        echo Post build: Copied assets.
+        if exist "$(ProjectDir)\assets" (
+            xcopy /e /y "$(ProjectDir)\assets" "$(OutDir)\assets\" &gt; nul
+            echo Post build: Copied assets.
+        )
       </Command>
     </PostBuildEvent>
     <Link>
+      <!-- Disable "LNK4099: PDB not found" because SOIL does not seem to have debug symbols -->
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
