@@ -5,6 +5,7 @@ using namespace std;
 void GettingStartedEngine::onInit()
 {
 	glClearColor(1.0f, 0.7f, 0, 0); // Alpha channel only used in alpha blending
+	cout << "Initialization successful\n";
 }
 
 void GettingStartedEngine::onRender()
@@ -13,7 +14,7 @@ void GettingStartedEngine::onRender()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Current back buffer is set as the current front buffer, shown on the screen.
-	// Required in a double buffered OpenGl application.
+	// Required in a double buffered OpenGL application.
 	glutSwapBuffers();
 }
 

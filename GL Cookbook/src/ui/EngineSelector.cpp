@@ -35,7 +35,7 @@ const EngineSpec &EngineSelector::selectSpec()
 	return spec;
 }
 
-const EngineSpec& EngineSelector::selectSpec(const std::string& id)
+const EngineSpec &EngineSelector::selectSpec(const std::string& id)
 {
 	if (id.length() != 2) exitApplication();
 
@@ -58,6 +58,7 @@ const EngineSpec& EngineSelector::selectSpec(const std::string& id)
 void EngineSelector::registerEngines()
 {
 	c1Engines_.push_back({ "Getting Started", [] { return new GettingStartedEngine(); } });
+	c1Engines_.push_back({ "Simple Triangle", [] { return new SimpleTriangleEngine(); } });
 }
 
 bool EngineSelector::clearConsole()

@@ -12,7 +12,7 @@ using namespace std;
 int GLApplication::glMajorVersion;
 int GLApplication::glMinorVersion;
 
-void GLApplication::initializeGLContext(int *argcp, char** argv, int glMajorVersion, int glMinorVersion)
+void GLApplication::initializeGLContext(int *argcp, char **argv, int glMajorVersion, int glMinorVersion)
 {
 	GLApplication::glMajorVersion = glMajorVersion;
 	GLApplication::glMinorVersion = glMinorVersion;
@@ -44,7 +44,7 @@ void GLApplication::createWindow(int width, int height)
 
 	glewInitialize_();
 
-	hookClass_->onInit(); // Renderere initialization
+	hookClass_->onInit(); // Renderer initialization
 	hookClass_->registerHooks(); // Register renderer callbacks for window
 }
 
