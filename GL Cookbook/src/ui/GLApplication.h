@@ -24,7 +24,7 @@ public:
 	explicit GLApplication(std::unique_ptr<GLEngine> &&pEngine) : hookClass_(std::move(pEngine)) { }
 
 	/** Construct with meta Engine specification */
-	explicit GLApplication(EngineSpec &spec) : engineName_(spec.name), hookClass_(spec.genInstance()) { }
+	explicit GLApplication(const EngineSpec &spec) : engineName_(spec.name), hookClass_(spec.genInstance()) { }
 
 	/** Create viewport window */
 	void createWindow(int width, int height);
@@ -41,6 +41,8 @@ private:
 	static int glMajorVersion, glMinorVersion;
 
 	std::string engineName_;
-	std::unique_ptr<GLEngine> hookClass_;
+
+	// Value will be overridden by constructor initialization
+	std::unique_ptr<GLEngine> hookClass_ = nullptr;
 
 };
