@@ -8,8 +8,8 @@ void SimpleTriangleEngine::onInit()
 	GL_CHECK_ERRORS;
 
 	// Load shader objects
-	shader_.loadFromFile(GL_VERTEX_SHADER, "shaders/a1_triangle_vert.glsl");
-	shader_.loadFromFile(GL_FRAGMENT_SHADER, "shaders/a1_triangle_frag.glsl");
+	shader_.loadFromFile(GL_VERTEX_SHADER, "shaders/a2_triangle_vert.glsl");
+	shader_.loadFromFile(GL_FRAGMENT_SHADER, "shaders/a2_triangle_frag.glsl");
 
 	// Compile and link shader program
 	shader_.createAndLinkProgram();

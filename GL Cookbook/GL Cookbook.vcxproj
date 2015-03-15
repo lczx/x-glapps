@@ -93,8 +93,8 @@
     <ClInclude Include="src\util\GLSLShader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\a1_triangle_frag.glsl" />
-    <None Include="src\shaders\a1_triangle_vert.glsl" />
+    <None Include="src\shaders\a2_triangle_frag.glsl" />
+    <None Include="src\shaders\a2_triangle_vert.glsl" />
     <None Include="src\shaders\a3_ripple_frag.glsl" />
     <None Include="src\shaders\a3_ripple_vert.glsl" />
   </ItemGroup>

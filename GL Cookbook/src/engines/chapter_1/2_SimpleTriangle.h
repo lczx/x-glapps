@@ -3,8 +3,8 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-#include "../../util/GLSLShader.h"
 #include "../GLEngine.h"
+#include "../../util/GLSLShader.h"
 
 /** Out vertex structure for interleaved attributes */
 struct VertexEx
