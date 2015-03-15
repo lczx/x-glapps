@@ -4,6 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "../GLEngine.h"
+#include "../../util/Geometry.h"
 #include "../../util/GLSLShader.h"
 
 // Out vertex format
@@ -12,8 +13,7 @@ typedef glm::vec3 Vertex;
 class RippleDeformerEngine : public GLEngine
 {
 public:
-	RippleDeformerEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_KEY) { }
-	void onInit() override;
+	RippleDeformerEngine();
 
 private:
 	void onRender() override;
@@ -30,6 +30,7 @@ private:
 
 	// Vertices count
 	// ... 3 verts for each triangle * 2 triangles for a quad
+	static const int TotalVertices = (NumX + 1) * (NumZ + 1);
 	static const int TotalIndices = NumX * NumZ * 2 * 3;
 
 	// Size of plane in world space
@@ -38,15 +39,9 @@ private:
 	// Ripple displacement speed
 	static const float Speed;
 
-	// Shader
+	// Geometry and shader
+	Geometry mesh_;
 	GLSLShader shader_;
-
-	// Buffer object IDs
-	GLuint vaoID_, vboVerticesID_, vboIndicesID_;
-
-	// Ripple mesh vertices and indices
-	Vertex vertices_[(NumX + 1) * (NumZ + 1)];
-	GLushort indices_[TotalIndices];
 
 	// Projection matrix
 	glm::mat4 P_;

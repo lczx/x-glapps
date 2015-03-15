@@ -4,6 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "../GLEngine.h"
+#include "../../util/Geometry.h"
 #include "../../util/GLSLShader.h"
 
 /** Out vertex structure for interleaved attributes */
@@ -16,23 +17,18 @@ struct VertexEx
 class SimpleTriangleEngine : public GLEngine
 {
 public:
-	SimpleTriangleEngine() : GLEngine(GLE_REGISTER_DISPLAY) { }
-	void onInit() override;
+	SimpleTriangleEngine();
 
 private:
 	void onRender() override;
 	void onResize(int w, int h) override;
 	void onShutdown() override;
 
+	// Geometry reference
+	Geometry triangle_;
+
 	// Shader reference
 	GLSLShader shader_;
-
-	// Vertex array and vertex buffer object IDs
-	GLuint vaoID_, vboVerticesID_, vboIndicesID_;
-
-	// Triangle vertices and indices
-	VertexEx vertices_[3];
-	GLushort indices_[3];
 
 	// Projection and modelview matrices
 	glm::mat4 P_ = glm::mat4(1);

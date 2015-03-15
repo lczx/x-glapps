@@ -89,6 +89,7 @@
     <ClInclude Include="src\engines\GLEngine.h" />
     <ClInclude Include="src\ui\EngineSelector.h" />
     <ClInclude Include="src\ui\GLApplication.h" />
+    <ClInclude Include="src\util\Geometry.h" />
     <ClInclude Include="src\util\glassert.h" />
     <ClInclude Include="src\util\GLSLShader.h" />
   </ItemGroup>

@@ -3,8 +3,39 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-void SimpleTriangleEngine::onInit()
+SimpleTriangleEngine::SimpleTriangleEngine() : GLEngine(GLE_REGISTER_DISPLAY)
 {
+	GL_CHECK_ERRORS;
+
+	// - VAO already set up in 'Geometry' constructor),
+	//   will be bound automatically when calling 'Geometry' methods.
+	// - VBOs will be generated automatically when assigning data
+	//   on 'addStaticBufferData' and 'genStaticBufferData'
+
+	/* The 'Geometry' object will bind the buffer object storing vertices with the passed
+	* in binding point (GL_ARRAY_BUFFER). Here we pass a generator for the points that
+	* will be passed in to the buffer using the same binding. We pass also the number of
+	* elements and the vertex type. The 'Geometry' will use 'GL_STATIC_DRAW',
+	* that means that we are not going to modify the data often. */
+
+	// Generate and pass triangle vertices to buffer object
+	triangle_.genStaticBufferData<VertexEx>(GL_ARRAY_BUFFER, 3, [](VertexEx *p)
+	{
+		// Setup triangle geometry: vertices(position, color)
+		p[0] = { glm::vec3(-1, -1, 0),	glm::vec3(1, 0, 0) };
+		p[1] = { glm::vec3(0, 1, 0),	glm::vec3(0, 1, 0) };
+		p[2] = { glm::vec3(1, -1, 0),	glm::vec3(0, 0, 1) };
+	});
+	GL_CHECK_ERRORS;
+
+	// Generate and pass indices to element array buffer
+	triangle_.genStaticBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, 3, [](GLushort *p)
+	{
+		// Setup triangle geometry: indices
+		p[0] = 0;
+		p[1] = 1;
+		p[2] = 2;
+	});
 	GL_CHECK_ERRORS;
 
 	// Load shader objects
@@ -23,78 +54,21 @@ void SimpleTriangleEngine::onInit()
 
 	GL_CHECK_ERRORS;
 
-	// Setup triangle geometry
-		// > vertices { position, color }
-		vertices_[0] = { glm::vec3(-1, -1, 0),	glm::vec3(1, 0, 0) };
-		vertices_[1] = { glm::vec3(0, 1, 0),	glm::vec3(0, 1, 0) };
-		vertices_[2] = { glm::vec3(1, -1, 0),	glm::vec3(0, 0, 1) };
-		// > indices
-		indices_[0] = 0;
-		indices_[1] = 1;
-		indices_[2] = 2;
+	/* Enable vertex attributes on the shader
+	* (attrib. location, elements amount, type, is_normalized, stride, offset) */
 
+	GLsizei stride = sizeof(VertexEx); // num. of bytes to jump to reach next elem. of same attribute.
+
+	// Enable vertex attribute array for position
+	glEnableVertexAttribArray(shader_["vVertex"]);
+	glVertexAttribPointer(shader_["vVertex"], 3, GL_FLOAT, GL_FALSE, stride, nullptr);
 	GL_CHECK_ERRORS;
 
-	/* In OpenGL v3.3 and above, we typically store the geometry information in buffer objects,
-	 * which is a linear array of memory managed by the GPU. In order to facilitate the handling
-	 * of buffer object(s) during rendering, we use a VERTEX ARRAY OBJECT (VAO). This object stores
-	 * references to buffer objects (VBO) that are bound after the VAO is bound. The advantage we get
-	 * from using a VAO is that after the VAO is bound, we do not have to bind the buffer object(s) (VBOs). */
-
-	/* In this demo, we declare three variables, 'vaoID_' for VAO handling and 'vboVerticesID_', 'vboIndicesID_'
-	 * for buffer object handling, first argument to functions is total number of objects required, and second
-	 * argument is reference to where the object handle is stored, all done in 'onInit()'. */
-
-	// Setup triangle VAO and VBO stuff (I think this means to allocate graphics memory)
-	glGenVertexArrays(1, &vaoID_);
-	glGenBuffers(1, &vboVerticesID_);
-	glGenBuffers(1, &vboIndicesID_);
-	// Stride: num. of bytes to jump to reach next element of the same attribute.
-	GLsizei stride = sizeof(VertexEx);
-
-	/* After the VAO object is generated, we bind it to the current OpenGL
-	 * context so that all successive calls affect the attached VAO object. */
-	glBindVertexArray(vaoID_);
-
-	/* We then bind the buffer object storing vertices with the 'GL_ARRAY_BUFFER' binding point.
-	 * Then we pass the data to the buffer object using again binding, size of the vertex array we want
-	 * to push to GPU memory, pointer to the start of the CPU memory, usage hint 'GL_STATIC_DRAW' tells that
-	 * we are not going to modify the data often. */
-
-	/* Usage hint: GL_[modify]_[usage]
-	 *   modify. STATIC  - modified once only
-	 *           DYNAMIC - modified occasionally
-	 *           STREAM  - modified at every use
-	 *   usage.  DRAW    - the data will be written but not read
-	 *           READ    - the data will be read only
-	 *           COPY    - the data will be neither read nor written
-	 * With these the GPU and driver can optimize the read/write access to this memory. */
-
-		// Pass triangle vertices to buffer object
-		glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID_);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_), &vertices_[0], GL_STATIC_DRAW);
-		GL_CHECK_ERRORS;
-
-	/* Enable vertex attributes
-	 * (attrib. location, elements amount, type, is_normalized, stride, offset) */
-
-		// Enable vertex attribute array for position
-		glEnableVertexAttribArray(shader_["vVertex"]);
-		glVertexAttribPointer(shader_["vVertex"], 3, GL_FLOAT, GL_FALSE, stride, nullptr);
-		GL_CHECK_ERRORS;
-
-		// Enable vertex attribute array for color
-		glEnableVertexAttribArray(shader_["vColor"]);
-		glVertexAttribPointer(shader_["vColor"], 3, GL_FLOAT, GL_FALSE, stride,
-			reinterpret_cast<const GLvoid *>(offsetof(VertexEx, color)));
-		GL_CHECK_ERRORS;
-
-	/* Push indices like we did with vertices, but on the 'GL_ELEMENT_ARRAY_BUFFER' binding point. */
-
-		// Pass indices to element array buffer
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID_);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices_), &indices_[0], GL_STATIC_DRAW);
-		GL_CHECK_ERRORS;
+	// Enable vertex attribute array for color
+	glEnableVertexAttribArray(shader_["vColor"]);
+	glVertexAttribPointer(shader_["vColor"], 3, GL_FLOAT, GL_FALSE, stride,
+		reinterpret_cast<const GLvoid *>(offsetof(VertexEx, color)));
+	GL_CHECK_ERRORS;
 
 	std::cout << "Initialization successful\n";
 }
@@ -148,10 +122,7 @@ void SimpleTriangleEngine::onShutdown()
 	// If we don't delete shader programs we will have graphic memory leaks
 	shader_.deleteShaderProgram();
 
-	// Destroy VAO and VBO
-	glDeleteBuffers(1, &vboVerticesID_);
-	glDeleteBuffers(1, &vboIndicesID_);
-	glDeleteVertexArrays(1, &vaoID_);
+	// VAO and VBOs are destroyed by the geometry object destructor
 
 	std::cout << "Shutdown successful\n";
 }
