@@ -60,8 +60,8 @@ public:
 		if (regEvtTypes_ & GLE_REG_IDLE) glutIdleFunc(cbOnIdle);
 	};
 
-	/** Initialization function (pure virtual) */
-	virtual void onInit() = 0;
+	/** DEPRECATED: Initialization function */
+	virtual void onInit() { /* Not pure virtual anymore! */ };
 
 private:
 	// Static callbacks

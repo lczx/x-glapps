@@ -38,14 +38,15 @@ void GLApplication::createWindow(int width, int height)
 	// Set screen size and create window
 	glutInitWindowSize(width, height);
 
-	string title = engineName_ + " - OpenGL " +
+	string title = engineSpec_.name + " - OpenGL " +
 		to_string(glMajorVersion) + '.' + to_string(glMinorVersion);
 	glutCreateWindow(title.c_str());
 
 	glewInitialize_();
 
-	hookClass_->onInit(); // Renderer initialization
-	hookClass_->registerHooks(); // Register renderer callbacks for window
+	engineInstance_ = std::unique_ptr<GLEngine>(engineSpec_.genInstance());
+	engineInstance_->onInit(); // Renderer initialization
+	engineInstance_->registerHooks(); // Register renderer callbacks for window
 }
 
 void GLApplication::glewShowInfo()
