@@ -59,6 +59,7 @@ void EngineSelector::registerEngines()
 {
 	c1Engines_.push_back({ "Getting Started", [] { return new GettingStartedEngine(); } });
 	c1Engines_.push_back({ "Simple Triangle", [] { return new SimpleTriangleEngine(); } });
+	c1Engines_.push_back({ "Ripple Deformer", [] { return new RippleDeformerEngine(); } });
 }
 
 bool EngineSelector::clearConsole()

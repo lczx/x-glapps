@@ -74,6 +74,7 @@
   <ItemGroup>
     <ClCompile Include="src\engines\chapter_1\1_GettingStarted.cpp" />
     <ClCompile Include="src\engines\chapter_1\2_SimpleTriangle.cpp" />
+    <ClCompile Include="src\engines\chapter_1\3_RippleDeformer.cpp" />
     <ClCompile Include="src\engines\GLEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ui\EngineSelector.cpp" />
@@ -84,6 +85,7 @@
     <ClInclude Include="src\engines\chapter_1\2_SimpleTriangle.h" />
     <ClInclude Include="src\engines\ch1.h" />
     <ClInclude Include="src\engines\chapter_1\1_GettingStarted.h" />
+    <ClInclude Include="src\engines\chapter_1\3_RippleDeformer.h" />
     <ClInclude Include="src\engines\GLEngine.h" />
     <ClInclude Include="src\ui\EngineSelector.h" />
     <ClInclude Include="src\ui\GLApplication.h" />
@@ -93,6 +95,8 @@
   <ItemGroup>
     <None Include="src\shaders\a1_triangle_frag.glsl" />
     <None Include="src\shaders\a1_triangle_vert.glsl" />
+    <None Include="src\shaders\a3_ripple_frag.glsl" />
+    <None Include="src\shaders\a3_ripple_vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
