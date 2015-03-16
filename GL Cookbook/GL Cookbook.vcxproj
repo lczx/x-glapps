@@ -72,9 +72,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Original source\src\engines\chapter_1\__4_Subdivision.cpp" />
     <ClCompile Include="src\engines\chapter_1\1_GettingStarted.cpp" />
     <ClCompile Include="src\engines\chapter_1\2_SimpleTriangle.cpp" />
     <ClCompile Include="src\engines\chapter_1\3_RippleDeformer.cpp" />
+    <ClCompile Include="src\engines\chapter_1\4_Subdivision.cpp" />
     <ClCompile Include="src\engines\GLEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ui\UISpecSelector.cpp" />
@@ -82,9 +84,11 @@
     <ClCompile Include="src\util\GLSLShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Original source\src\engines\chapter_1\__4_Subdivision.h" />
     <ClInclude Include="src\engines\chapter_1\2_SimpleTriangle.h" />
     <ClInclude Include="src\engines\chapter_1\1_GettingStarted.h" />
     <ClInclude Include="src\engines\chapter_1\3_RippleDeformer.h" />
+    <ClInclude Include="src\engines\chapter_1\4_Subdivision.h" />
     <ClInclude Include="src\engines\GLEngine.h" />
     <ClInclude Include="src\ui\EngineRegistry.h" />
     <ClInclude Include="src\ui\UISpecSelector.h" />
