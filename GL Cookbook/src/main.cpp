@@ -1,10 +1,9 @@
 ﻿#include "ui/GLApplication.h"
-#include "ui/EngineSelector.h"
+#include "ui/UISpecSelector.h"
 
 int main(int argc, char *argv[])
 {
-	EngineSelector es;
-	es.registerEngines();
+	UISpecSelector es;
 
 	// Version: 3.3 or 4.3, INTEL HD 3000 SUPPORTS MAX 3.1 <---
 	GLApplication::initializeGLContext(&argc, argv, 3, 1);

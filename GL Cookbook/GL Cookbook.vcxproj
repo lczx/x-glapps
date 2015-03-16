@@ -77,17 +77,17 @@
     <ClCompile Include="src\engines\chapter_1\3_RippleDeformer.cpp" />
     <ClCompile Include="src\engines\GLEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\ui\EngineSelector.cpp" />
+    <ClCompile Include="src\ui\UISpecSelector.cpp" />
     <ClCompile Include="src\ui\GLApplication.cpp" />
     <ClCompile Include="src\util\GLSLShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engines\chapter_1\2_SimpleTriangle.h" />
-    <ClInclude Include="src\engines\ch1.h" />
     <ClInclude Include="src\engines\chapter_1\1_GettingStarted.h" />
     <ClInclude Include="src\engines\chapter_1\3_RippleDeformer.h" />
     <ClInclude Include="src\engines\GLEngine.h" />
-    <ClInclude Include="src\ui\EngineSelector.h" />
+    <ClInclude Include="src\ui\EngineRegistry.h" />
+    <ClInclude Include="src\ui\UISpecSelector.h" />
     <ClInclude Include="src\ui\GLApplication.h" />
     <ClInclude Include="src\util\Geometry.h" />
     <ClInclude Include="src\util\glassert.h" />
