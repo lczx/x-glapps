@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "GLApplication.h"
+#include "EngineSpec.h"
 
 class UISpecSelector
 {

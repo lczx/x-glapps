@@ -1,15 +1,8 @@
 ﻿#pragma once
 
 #include <memory>
-#include <functional>
 
-#include "../engines/GLEngine.h"
-
-struct EngineSpec
-{
-	std::string name;
-	std::function<GLEngine *()> genInstance;
-};
+#include "EngineSpec.h"
 
 class GLApplication
 {

@@ -87,6 +87,7 @@
     <ClInclude Include="src\engines\chapter_1\3_RippleDeformer.h" />
     <ClInclude Include="src\engines\GLEngine.h" />
     <ClInclude Include="src\ui\EngineRegistry.h" />
+    <ClInclude Include="src\ui\EngineSpec.h" />
     <ClInclude Include="src\ui\UISpecSelector.h" />
     <ClInclude Include="src\ui\GLApplication.h" />
     <ClInclude Include="src\util\Geometry.h" />

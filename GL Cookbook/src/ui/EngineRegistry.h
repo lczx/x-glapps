@@ -3,7 +3,7 @@
 #include <map>
 #include <vector>
 
-#include "GLApplication.h"
+#include "EngineSpec.h"
 
 #include "../engines/chapter_1/1_GettingStarted.h"
 #include "../engines/chapter_1/2_SimpleTriangle.h"
