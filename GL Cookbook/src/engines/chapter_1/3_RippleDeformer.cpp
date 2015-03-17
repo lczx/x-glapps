@@ -84,8 +84,8 @@ void RippleDeformerEngine::onRender()
 	time_ = glutGet(GLUT_ELAPSED_TIME) / 1000.0f * Speed; // Get current time to animate
 
 	// Set the camera viewing transformation
-	glm::mat4 T_ = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, dist_)); // Traslate Z
-	glm::mat4 Rx = glm::rotate(T_, rX_, glm::vec3(1.0f, 0.0f, 0.0f)); // Rotate X
+	glm::mat4 T = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, dist_)); // Traslate Z
+	glm::mat4 Rx = glm::rotate(T, rX_, glm::vec3(1.0f, 0.0f, 0.0f)); // Rotate X
 	glm::mat4 MV = glm::rotate(Rx, rY_, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotate Y
 	glm::mat4 MVP = P_ * MV; // 'P_' is calculated in 'onResize()'
 
