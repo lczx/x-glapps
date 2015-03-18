@@ -29,8 +29,7 @@ SubdivisionEngine::SubdivisionEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDL
 	shader_.addAttribute("vVertex");
 	shader_.addUniform("MVP");
 	shader_.addUniform("sub_divisions");
-	//! try to enable this line and change uniform value on key event.
-	//glUniform1i(shader_("sub_divisions"), subDivisions_); // <-- not const, updated on frame
+	glUniform1i(shader_("sub_divisions"), subDivisions_); // <-- set initial value here
 	shader_.unuse();
 
 	GL_CHECK_ERRORS;
@@ -86,7 +85,7 @@ void SubdivisionEngine::onRender()
 	glm::mat4 MV = glm::rotate(Rx, rY_, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	shader_.use();
-	glUniform1i(shader_("sub_divisions"), subDivisions_);
+	// glUniform1i(shader_("sub_divisions"), subDivisions_);	Already handled on init and key event.
 
 	// 1st submesh
 	MV = glm::translate(MV, glm::vec3(-6, 0, -6));
@@ -160,5 +159,8 @@ void SubdivisionEngine::onKey(unsigned char key, int, int)
 	case '.': subDivisions_++; break;
 	}
 	subDivisions_ = std::max(0, std::min(8, subDivisions_));
+	shader_.use();
+	glUniform1i(shader_("sub_divisions"), subDivisions_); // <-- update value
+	shader_.unuse();
 	glutPostRedisplay();
 }
