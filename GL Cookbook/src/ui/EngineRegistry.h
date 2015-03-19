@@ -8,6 +8,8 @@
 #include "../engines/chapter_1/1_GettingStarted.h"
 #include "../engines/chapter_1/2_SimpleTriangle.h"
 #include "../engines/chapter_1/3_RippleDeformer.h"
+#include "../engines/chapter_1/4_Subdivision.h"
+#include "../engines/chapter_1/5_SubdivisionInst.h"
 
 typedef std::map<std::string, std::vector<EngineSpec>> EngineRegistryData;
 
@@ -32,7 +34,9 @@ private:
 		engines_["Chapter 1"] = {
 			{ "Getting Started", [] { return new GettingStartedEngine(); } },
 			{ "Simple Triangle", [] { return new SimpleTriangleEngine(); } },
-			{ "Ripple Deformer", [] { return new RippleDeformerEngine(); } }
+			{ "Ripple Deformer", [] { return new RippleDeformerEngine(); } },
+			{ "Plane subdivision", [] { return new SubdivisionEngine(); } },
+			{ "Plane subdivision, instanced", [] { return new SubdivisionInstEngine();  } }
 		};
 	}
 
