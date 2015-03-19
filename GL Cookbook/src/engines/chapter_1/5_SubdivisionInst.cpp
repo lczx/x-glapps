@@ -1,11 +1,11 @@
-﻿#include "4_Subdivision.h"
+﻿#include "5_SubdivisionInst.h"
 
 #include <algorithm>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-SubdivisionEngine::SubdivisionEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDLE)
+SubdivisionInstEngine::SubdivisionInstEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDLE)
 {
 	GL_CHECK_ERRORS;
 
@@ -20,26 +20,33 @@ SubdivisionEngine::SubdivisionEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDL
 	//     cout << "Cannot retrieve GL_MAX_GEOMETRY_OUTPUT_VERTICES (min. GL version: 3.2).\n";
 
 	// Load, create and link the shader
-	shader_.loadFromFile(GL_VERTEX_SHADER, "shaders/a4_subdiv_vert.glsl");
-	shader_.loadFromFile(GL_GEOMETRY_SHADER, "shaders/a4_subdiv_geom.glsl");
+	shader_.loadFromFile(GL_VERTEX_SHADER, "shaders/a5_subdivi_vert.glsl");
+	shader_.loadFromFile(GL_GEOMETRY_SHADER, "shaders/a5_subdivi_geom.glsl");
 	shader_.loadFromFile(GL_FRAGMENT_SHADER, "shaders/a4_subdiv_frag.glsl");
 	shader_.createAndLinkProgram();
+
+	M_[0] = translate(glm::mat4(1), glm::vec3(-6, 0, -6));
+	M_[1] = translate(M_[0], glm::vec3(12, 0, 0));
+	M_[2] = translate(M_[1], glm::vec3(0, 0, 12));
+	M_[3] = translate(M_[2], glm::vec3(-12, 0, 0));
 
 	// Add attributes and uniforms
 	shader_.use();
 	shader_.addAttribute("vVertex");
-	shader_.addUniform("MVP");
+	shader_.addUniform("PV"); // New instanced attribs
+	shader_.addUniform("M");
 	shader_.addUniform("sub_divisions");
 	glUniform1i(shader_("sub_divisions"), subDivisions_); // <-- set initial value here
+	glUniformMatrix4fv(shader_("M"), 4, GL_FALSE, glm::value_ptr(M_[0]));
 	shader_.unuse();
 
 	GL_CHECK_ERRORS;
 
-	// Create geometry...
+	// Create geometry
 	vertices_[0] = glm::vec3(-5, 0, -5);
 	vertices_[1] = glm::vec3(-5, 0, 5);
 	vertices_[2] = glm::vec3(5, 0, 5);
-	// vertices[3] = glm::vec3(5, 0, -5); // IT ALSO WORKS WITH ONLY A TRIANGLE
+	//vertices_[3] = glm::vec3(5, 0, -5); // IT ALSO WORKS WITH ONLY A TRIANGLE
 
 	// ...and topology
 	GLushort *id = &indices_[0];
@@ -75,7 +82,7 @@ SubdivisionEngine::SubdivisionEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDL
 	std::cout << "Initialization successful\n";
 }
 
-void SubdivisionEngine::onRender()
+void SubdivisionInstEngine::onRender()
 {
 	// Clear color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -83,46 +90,28 @@ void SubdivisionEngine::onRender()
 	// Set the camera transformation
 	glm::mat4 T = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, dist_));
 	glm::mat4 Rx = glm::rotate(T, rX_, glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::mat4 MV = glm::rotate(Rx, rY_, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 V = glm::rotate(Rx, rY_, glm::vec3(0.0f, 1.0f, 0.0f)); // ex. MV
+	glm::mat4 PV = P_ * V;
 
 	shader_.use();
 	// glUniform1i(shader_("sub_divisions"), subDivisions_);	Already handled on init and key event
-
-	// 1st submesh
-	MV = glm::translate(MV, glm::vec3(-6, 0, -6));
-	glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
-	glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
-
-	// 2nd submesh
-	MV = glm::translate(MV, glm::vec3(12, 0, 0));
-	glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
-	glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
-
-	// 3rd submesh
-	MV = glm::translate(MV, glm::vec3(0, 0, 12));
-	glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
-	glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
-
-	// 4th submesh
-	MV = glm::translate(MV, glm::vec3(-12, 0, 0));
-	glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
-	glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
-
+	glUniformMatrix4fv(shader_("PV"), 1, GL_FALSE, glm::value_ptr(PV));
+	glDrawElementsInstanced(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr, 4);
 	shader_.unuse();
 
 	glutSwapBuffers();
 }
 
-void SubdivisionEngine::onResize(int w, int h)
+void SubdivisionInstEngine::onResize(int w, int h)
 {
-	// Set viewport size
+	// Set the viewport size
 	glViewport(0, 0, static_cast<GLsizei>(w), static_cast<GLsizei>(h));
 
 	// Setup the projection matrix
 	P_ = glm::perspective(45.0f, static_cast<GLfloat>(w) / h, 0.01f, 10000.0f);
 }
 
-void SubdivisionEngine::onShutdown()
+void SubdivisionInstEngine::onShutdown()
 {
 	// Destroy shader
 	shader_.deleteShaderProgram();
@@ -135,13 +124,13 @@ void SubdivisionEngine::onShutdown()
 	std::cout << "Shutdown successful\n";
 }
 
-void SubdivisionEngine::onMouseDown(int button, int s, int x, int y)
+void SubdivisionInstEngine::onMouseDown(int button, int s, int x, int y)
 {
 	if (s == GLUT_DOWN) oldX_ = x, oldY_ = y;
 	state_ = button == GLUT_RIGHT_BUTTON;
 }
 
-void SubdivisionEngine::onMouseMove(int x, int y)
+void SubdivisionInstEngine::onMouseMove(int x, int y)
 {
 	if (state_)
 		dist_ *= 1 + (y - oldY_) / 60.0f;
@@ -153,7 +142,7 @@ void SubdivisionEngine::onMouseMove(int x, int y)
 	glutPostRedisplay();
 }
 
-void SubdivisionEngine::onKey(unsigned char key, int, int)
+void SubdivisionInstEngine::onKey(unsigned char key, int, int)
 {
 	switch (key) {
 	case ',': subDivisions_--; break;
