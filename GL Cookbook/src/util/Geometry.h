@@ -40,6 +40,7 @@ public:
 		glDeleteVertexArrays(1, &vaoID_);
 	}
 
+	/** Makes a new VBO for this Geometry */
 	void generateBufferObject(GLenum bufferType)
 	{
 		// Generate a new VBO (does this allocate graphics memory? Now?)
