@@ -42,37 +42,29 @@ SubdivisionInstEngine::SubdivisionInstEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE
 
 	GL_CHECK_ERRORS;
 
-	// Create geometry
-	vertices_[0] = glm::vec3(-5, 0, -5);
-	vertices_[1] = glm::vec3(-5, 0, 5);
-	vertices_[2] = glm::vec3(5, 0, 5);
-	//vertices_[3] = glm::vec3(5, 0, -5); // IT ALSO WORKS WITH ONLY A TRIANGLE
+	// Generate and pass the quad vertices to buffer object
+	geom_.genStaticBufferData<glm::vec3>(GL_ARRAY_BUFFER, TotalVertices, [](glm::vec3 *p)
+	{
+		// Create geometry
+		p[0] = glm::vec3(-5, 0, -5);
+		p[1] = glm::vec3(-5, 0, 5);
+		p[2] = glm::vec3(5, 0, 5);
+		//vertices_[3] = glm::vec3(5, 0, -5); // IT ALSO WORKS WITH ONLY A TRIANGLE
+	});
+	GL_CHECK_ERRORS;
 
-	// ...and topology
-	GLushort *id = &indices_[0];
-	id[0] = 0; id[1] = 1; id[2] = 2;
-	//id[3] = 0; id[4] = 2; id[5] = 3; // IT ALSO WORKS WITH ONLY A TRIANGLE
-
-	// Store geometry and topology in the object buffer(s) (VAO / VBO)
-	glGenVertexArrays(1, &vaoID_);
-	glGenBuffers(1, &vboVerticesID_);
-	glGenBuffers(1, &vboIndicesID_);
-
-	glBindVertexArray(vaoID_);
-
-	// Pass the quad vertices to buffer object
-	glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID_);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_), &vertices_[0], GL_STATIC_DRAW);
+	// Generate and pass the quad indices to element array buffer
+	geom_.genStaticBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, TotalIndices, [](GLushort *p)
+	{
+		// ...and topology
+		p[0] = 0; p[1] = 1; p[2] = 2;
+		//p[3] = 0; p[4] = 2; p[5] = 3; // IT ALSO WORKS WITH ONLY A TRIANGLE
+	});
 	GL_CHECK_ERRORS;
 
 	// Enable vertex attribute array for position
 	glEnableVertexAttribArray(shader_["vVertex"]);
 	glVertexAttribPointer(shader_["vVertex"], 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	GL_CHECK_ERRORS;
-
-	// Pass the quad indices to element array buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID_);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices_), &indices_[0], GL_STATIC_DRAW);
 	GL_CHECK_ERRORS;
 
 	// Set the poly mode to render lines (wireframe rendering)
@@ -116,10 +108,7 @@ void SubdivisionInstEngine::onShutdown()
 	// Destroy shader
 	shader_.deleteShaderProgram();
 
-	// Destroy VAO and VBO
-	glDeleteBuffers(1, &vboVerticesID_);
-	glDeleteBuffers(1, &vboIndicesID_);
-	glDeleteVertexArrays(1, &vaoID_);
+	// VAO and VBOs are destroyed by the geometry object destructor
 
 	std::cout << "Shutdown successful\n";
 }

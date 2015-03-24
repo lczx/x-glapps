@@ -4,6 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "../GLEngine.h"
+#include "../../util/Geometry.h"
 #include "../../util/GLSLShader.h"
 
 class SubdivisionInstEngine : public GLEngine
@@ -20,16 +21,12 @@ private:
 	void onMouseMove(int x, int y) override;
 	void onKey(unsigned char key, int x, int y) override;
 
-	// Shader
+	static const int TotalVertices = 3; // IT ALSO WORKS WITH ONLY A TRIANGLE (was 4)
+	static const int TotalIndices = 3; // IT ALSO WORKS WITH ONLY A TRIANGLE (was 6)
+
+	// Geometry and shader 
+	Geometry geom_;
 	GLSLShader shader_;
-
-	// Buffer object IDs
-	GLuint vaoID_, vboVerticesID_, vboIndicesID_;
-
-	// Mesh vertices and indices
-	glm::vec3 vertices_[4];
-	static const int TotalIndices = 3; // IT ALSO WORKS WITH ONLY A TRIANGLE
-	GLushort indices_[TotalIndices];
 
 	// Projection matrix
 	glm::mat4 P_ = glm::mat4(1);
