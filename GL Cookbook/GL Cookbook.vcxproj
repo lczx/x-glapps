@@ -77,6 +77,7 @@
     <ClCompile Include="src\engines\chapter_1\3_RippleDeformer.cpp" />
     <ClCompile Include="src\engines\chapter_1\4_Subdivision.cpp" />
     <ClCompile Include="src\engines\chapter_1\5_SubdivisionInst.cpp" />
+    <ClCompile Include="src\engines\chapter_1\6_ImageLoader.cpp" />
     <ClCompile Include="src\engines\GLEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ui\UISpecSelector.cpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="src\engines\chapter_1\3_RippleDeformer.h" />
     <ClInclude Include="src\engines\chapter_1\4_Subdivision.h" />
     <ClInclude Include="src\engines\chapter_1\5_SubdivisionInst.h" />
+    <ClInclude Include="src\engines\chapter_1\6_ImageLoader.h" />
     <ClInclude Include="src\engines\GLEngine.h" />
     <ClInclude Include="src\ui\EngineRegistry.h" />
     <ClInclude Include="src\ui\EngineSpec.h" />
@@ -108,6 +110,8 @@
     <None Include="src\shaders\a4_subdiv_vert.glsl" />
     <None Include="src\shaders\a5_subdivi_geom.glsl" />
     <None Include="src\shaders\a5_subdivi_vert.glsl" />
+    <None Include="src\shaders\a6_image_frag.glsl" />
+    <None Include="src\shaders\a6_image_vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
