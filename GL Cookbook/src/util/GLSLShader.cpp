@@ -74,7 +74,7 @@ void GLSLShader::loadFromString(GLenum shaderType, const string &source)
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar *infoLog = new GLchar[infoLogLength];
 		glGetShaderInfoLog(shader, infoLogLength, nullptr, infoLog);
-		cerr << "Shader (" << _GetShaderName(shaderType) << ") compile log: " << infoLog;
+		cerr << "Shader (" << _GetShaderName(shaderType) << ") compile log: " << infoLog << '\n';
 		delete[] infoLog;
 	//}
 
