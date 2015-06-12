@@ -83,6 +83,7 @@
     <ClCompile Include="src\ui\UISpecSelector.cpp" />
     <ClCompile Include="src\ui\GLApplication.cpp" />
     <ClCompile Include="src\util\GLSLShader.cpp" />
+    <ClCompile Include="src\util\MouseFilter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engines\chapter_1\1_GettingStarted.h" />
@@ -99,6 +100,7 @@
     <ClInclude Include="src\util\Geometry.h" />
     <ClInclude Include="src\util\glassert.h" />
     <ClInclude Include="src\util\GLSLShader.h" />
+    <ClInclude Include="src\util\MouseFilter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\a2_triangle_frag.glsl" />
