@@ -3,6 +3,7 @@
 #include <glm/vec2.hpp>
 
 #include "../GLEngine.h"
+#include "../../util/Geometry.h"
 #include "../../util/GLSLShader.h"
 
 class ImageLoaderEngine : public GLEngine
@@ -24,14 +25,11 @@ private:
 	// Texture image filename
 	std::string texturePath_;
 
-	// Shader reference
+	// Geometry and shader reference
+	Geometry geom_;
 	GLSLShader shader_;
 
-	// Quad vertices and indices
-	glm::vec2 vertices_[TotalVertices];
-	GLushort indices_[TotalIndices];
-
-	// Vertex array, vertex buffer object and texture ID for fullscreen quad
-	GLuint vaoID_, vboVerticesID_, vboIndicesID_, textureID_;
+	// Texture ID for fullscreen quad
+	GLuint textureID_;
 	
 };

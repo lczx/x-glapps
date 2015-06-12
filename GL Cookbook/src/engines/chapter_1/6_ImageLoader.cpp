@@ -24,38 +24,26 @@ ImageLoaderEngine::ImageLoaderEngine(const char* texturePath)
 
 	GL_CHECK_ERRORS;
 
-	// Setup geometry and topology
-	vertices_[0] = glm::vec2(0.0, 0.0);
-	vertices_[1] = glm::vec2(1.0, 0.0);
-	vertices_[2] = glm::vec2(1.0, 1.0);
-	vertices_[3] = glm::vec2(0.0, 1.0);
-
-	GLushort *id = &indices_[0];;
-	id[0] = 0; id[1] = 1; id[2] = 2;
-	id[3] = 0; id[4] = 2; id[5] = 3;
+	geom_.genStaticBufferData<glm::vec2>(GL_ARRAY_BUFFER, TotalVertices, [](glm::vec2 *p)
+	{
+		// Setup geometry and topology
+		p[0] = glm::vec2(0.0, 0.0);
+		p[1] = glm::vec2(1.0, 0.0);
+		p[2] = glm::vec2(1.0, 1.0);
+		p[3] = glm::vec2(0.0, 1.0);
+	});
 	GL_CHECK_ERRORS;
 
-	// Pass data to the GPU using buffer objects
-	// Setup quad VAO and VBO stuff
-	glGenVertexArrays(1, &vaoID_);
-	glGenBuffers(1, &vboVerticesID_);
-	glGenBuffers(1, &vboIndicesID_);
-
-	glBindVertexArray(vaoID_);
-
-	// Pass quad vertices to buffer object
-	glBindBuffer(GL_ARRAY_BUFFER, vboVerticesID_);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_), &vertices_[0], GL_STATIC_DRAW);
+	geom_.genStaticBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, TotalIndices, [](GLushort *p)
+	{
+		p[0] = 0; p[1] = 1; p[2] = 2;
+		p[3] = 0; p[4] = 2; p[5] = 3;
+	});
 	GL_CHECK_ERRORS;
 
 	// Enable vertex attribute array for position
 	glEnableVertexAttribArray(shader_["vVertex"]);
 	glVertexAttribPointer(shader_["vVertex"], 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	GL_CHECK_ERRORS;
-
-	// Pass quad indices to element array buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndicesID_);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices_), &indices_[0], GL_STATIC_DRAW);
 	GL_CHECK_ERRORS;
 
 	loadTexture();
@@ -89,10 +77,7 @@ void ImageLoaderEngine::onShutdown()
 	// Destroy shader
 	shader_.deleteShaderProgram();
 
-	// Delete VAO and VBO
-	glDeleteBuffers(1, &vboVerticesID_);
-	glDeleteBuffers(1, &vboIndicesID_);
-	glDeleteVertexArrays(1, &vaoID_);
+	// VAO and VBOs are destroyed by the geometry object destructor
 
 	// Delete textures too
 	glDeleteTextures(1, &textureID_);
