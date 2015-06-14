@@ -53,24 +53,24 @@ public:
 		bufferObjects_[bufferType] = curVboID;
 	}
 
-	/** Adds static buffer data (will be registered using 'GL_STATIC_DRAW') */
-	void addStaticBufferData(GLenum bufferType, const void *data, GLsizeiptr dataElemSz)
+	/** Initializes buffer object data */
+	void setBufferData(GLenum bufferType, const void *data, GLsizeiptr dataElemSz, GLenum usage)
 	{
 		// If we don't have already a VBO with this type, generate it
 		if (bufferObjects_.find(bufferType) == bufferObjects_.end()) generateBufferObject(bufferType);
 
 		// Store passed data into the buffer, VBO should be selected automatically by binding its VAO
 		glBindVertexArray(vaoID_);
-		glBufferData(bufferType, dataElemSz, data, GL_STATIC_DRAW);
+		glBufferData(bufferType, dataElemSz, data, usage);
 	}
 
-	/** Generates buffer data from a lambda generator and adds it using 'addStaticBufferData' */
+	/** Genertes buffer object data from a lambda generator */
 	template<typename T>
-	void genStaticBufferData(GLenum bufferType, size_t arraySz, std::function<void(T * const)> generator)
+	void genBufferData(GLenum bufferType, size_t arraySz, GLenum usage, std::function<void(T * const)> generator)
 	{
 		auto buffer = std::unique_ptr<T[]>(new T[arraySz]);
 		generator(&buffer[0]);
-		addStaticBufferData(bufferType, &buffer[0], arraySz * sizeof(T));
+		setBufferData(bufferType, &buffer[0], arraySz * sizeof(T), usage);
 	}
 
 private:

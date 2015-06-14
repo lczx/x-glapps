@@ -24,7 +24,7 @@ ImageLoaderEngine::ImageLoaderEngine(const char* texturePath)
 
 	GL_CHECK_ERRORS;
 
-	geom_.genStaticBufferData<glm::vec2>(GL_ARRAY_BUFFER, TotalVertices, [](glm::vec2 *p)
+	geom_.genBufferData<glm::vec2>(GL_ARRAY_BUFFER, TotalVertices, GL_STATIC_DRAW, [](glm::vec2 *p)
 	{
 		// Setup geometry and topology
 		p[0] = glm::vec2(0.0, 0.0);
@@ -34,7 +34,7 @@ ImageLoaderEngine::ImageLoaderEngine(const char* texturePath)
 	});
 	GL_CHECK_ERRORS;
 
-	geom_.genStaticBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, TotalIndices, [](GLushort *p)
+	geom_.genBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, TotalIndices, GL_STATIC_DRAW, [](GLushort *p)
 	{
 		p[0] = 0; p[1] = 1; p[2] = 2;
 		p[3] = 0; p[4] = 2; p[5] = 3;

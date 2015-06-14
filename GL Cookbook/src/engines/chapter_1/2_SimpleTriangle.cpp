@@ -19,7 +19,7 @@ SimpleTriangleEngine::SimpleTriangleEngine() : GLEngine(GLE_REGISTER_DISPLAY)
 	* that means that we are not going to modify the data often. */
 
 	// Generate and pass triangle vertices to buffer object
-	triangle_.genStaticBufferData<VertexEx>(GL_ARRAY_BUFFER, 3, [](VertexEx *p)
+	triangle_.genBufferData<VertexEx>(GL_ARRAY_BUFFER, 3, GL_STATIC_DRAW, [](VertexEx *p)
 	{
 		// Setup triangle geometry: vertices(position, color)
 		p[0] = { glm::vec3(-1, -1, 0),	glm::vec3(1, 0, 0) };
@@ -29,7 +29,7 @@ SimpleTriangleEngine::SimpleTriangleEngine() : GLEngine(GLE_REGISTER_DISPLAY)
 	GL_CHECK_ERRORS;
 
 	// Generate and pass indices to element array buffer
-	triangle_.genStaticBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, 3, [](GLushort *p)
+	triangle_.genBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, 3, GL_STATIC_DRAW, [](GLushort *p)
 	{
 		// Setup triangle geometry: indices
 		p[0] = 0;

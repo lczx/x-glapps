@@ -36,7 +36,7 @@ SubdivisionEngine::SubdivisionEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDL
 	GL_CHECK_ERRORS;
 
 	// Generate and pass the quad vertices to buffer object
-	geom_.genStaticBufferData<glm::vec3>(GL_ARRAY_BUFFER, TotalVertices, [](glm::vec3 *p)
+	geom_.genBufferData<glm::vec3>(GL_ARRAY_BUFFER, TotalVertices, GL_STATIC_DRAW, [](glm::vec3 *p)
 	{
 		// Create geometry...
 		p[0] = glm::vec3(-5, 0, -5);
@@ -47,7 +47,7 @@ SubdivisionEngine::SubdivisionEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDL
 	GL_CHECK_ERRORS;
 
 	// Generate and pass the quad indices to element array buffer
-	geom_.genStaticBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, TotalIndices, [](GLushort *p)
+	geom_.genBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, TotalIndices, GL_STATIC_DRAW, [](GLushort *p)
 	{
 		// ...and topology
 		p[0] = 0; p[1] = 1; p[2] = 2;

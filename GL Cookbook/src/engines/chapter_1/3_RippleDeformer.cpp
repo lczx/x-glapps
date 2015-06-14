@@ -11,7 +11,7 @@ const float
 RippleDeformerEngine::RippleDeformerEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_KEY)
 {
 	// Generate and pass mesh vertices to geometry
-	mesh_.genStaticBufferData<Vertex>(GL_ARRAY_BUFFER, TotalVertices, [](Vertex *p)
+	mesh_.genBufferData<Vertex>(GL_ARRAY_BUFFER, TotalVertices, GL_STATIC_DRAW, [](Vertex *p)
 	{
 		// Create the geometry and topology
 		//int count = 0;
@@ -28,7 +28,7 @@ RippleDeformerEngine::RippleDeformerEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_R
 	});
 
 	// Generate and pass indices to geometry
-	mesh_.genStaticBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, TotalIndices, [](GLushort *p)
+	mesh_.genBufferData<GLushort>(GL_ELEMENT_ARRAY_BUFFER, TotalIndices, GL_STATIC_DRAW, [](GLushort *p)
 	{
 		// Fill the plane indices array
 		GLushort *id = &p[0];
