@@ -64,7 +64,7 @@ public:
 		glBufferData(bufferType, dataElemSz, data, usage);
 	}
 
-	/** Genertes buffer object data from a lambda generator */
+	/** Generates buffer object data from a lambda generator */
 	template<typename T>
 	void genBufferData(GLenum bufferType, size_t arraySz, GLenum usage, std::function<void(T * const)> generator)
 	{
