@@ -10,7 +10,7 @@
 class SubdivisionEngine : public GLEngine
 {
 public:
-	SubdivisionEngine();
+	SubdivisionEngine(bool instanced);
 
 private:
 	void onRender() override;
@@ -37,5 +37,11 @@ private:
 
 	// Number of sub-divisions
 	int subDivisions_ = 1;
+
+	// 'true' if in instanced mode
+	bool instanced_;
+
+	// Instance modeling matrices (used only if operating in instanced mode)
+	glm::mat4 M_[4];
 	
 };

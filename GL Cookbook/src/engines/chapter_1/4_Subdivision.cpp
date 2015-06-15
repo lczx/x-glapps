@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-SubdivisionEngine::SubdivisionEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDLE)
+SubdivisionEngine::SubdivisionEngine(bool instanced) : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDLE), instanced_(instanced)
 {
 	GL_CHECK_ERRORS;
 
@@ -20,17 +20,36 @@ SubdivisionEngine::SubdivisionEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDL
 	//     cout << "Cannot retrieve GL_MAX_GEOMETRY_OUTPUT_VERTICES (min. GL version: 3.2).\n";
 
 	// Load, create and link the shader
-	shader_.loadFromFile(GL_VERTEX_SHADER, "shaders/a4_subdiv_vert.glsl");
-	shader_.loadFromFile(GL_GEOMETRY_SHADER, "shaders/a4_subdiv_geom.glsl");
+	if (instanced_) {
+		shader_.loadFromFile(GL_VERTEX_SHADER, "shaders/a5_subdivi_vert.glsl");
+		shader_.loadFromFile(GL_GEOMETRY_SHADER, "shaders/a5_subdivi_geom.glsl");
+	} else {
+		shader_.loadFromFile(GL_VERTEX_SHADER, "shaders/a4_subdiv_vert.glsl");
+		shader_.loadFromFile(GL_GEOMETRY_SHADER, "shaders/a4_subdiv_geom.glsl");
+	}
 	shader_.loadFromFile(GL_FRAGMENT_SHADER, "shaders/a4_subdiv_frag.glsl");
 	shader_.createAndLinkProgram();
+
+	if (instanced_) {
+		M_[0] = translate(glm::mat4(1), glm::vec3(-6, 0, -6));
+		M_[1] = translate(M_[0], glm::vec3(12, 0, 0));
+		M_[2] = translate(M_[1], glm::vec3(0, 0, 12));
+		M_[3] = translate(M_[2], glm::vec3(-12, 0, 0));
+	}
 
 	// Add attributes and uniforms
 	shader_.use();
 	shader_.addAttribute("vVertex");
-	shader_.addUniform("MVP");
+	if (instanced_) {
+		shader_.addUniform("PV"); // New instanced attribs
+		shader_.addUniform("M");
+	} else {
+		shader_.addUniform("MVP");
+	}
 	shader_.addUniform("sub_divisions");
 	glUniform1i(shader_("sub_divisions"), subDivisions_); // <-- set initial value here
+	if (instanced_)
+		glUniformMatrix4fv(shader_("M"), 4, GL_FALSE, glm::value_ptr(M_[0]));
 	shader_.unuse();
 
 	GL_CHECK_ERRORS;
@@ -42,7 +61,7 @@ SubdivisionEngine::SubdivisionEngine() : GLEngine(GLE_REGISTER_ALL ^ GLE_REG_IDL
 		p[0] = glm::vec3(-5, 0, -5);
 		p[1] = glm::vec3(-5, 0, 5);
 		p[2] = glm::vec3(5, 0, 5);
-		// vertices[3] = glm::vec3(5, 0, -5); // IT ALSO WORKS WITH ONLY A TRIANGLE
+		// vertices_[3] = glm::vec3(5, 0, -5); // IT ALSO WORKS WITH ONLY A TRIANGLE
 	});
 	GL_CHECK_ERRORS;
 
@@ -75,30 +94,39 @@ void SubdivisionEngine::onRender()
 	// Set the camera transformation
 	glm::mat4 T = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, dist_));
 	glm::mat4 Rx = glm::rotate(T, rX_, glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::mat4 MV = glm::rotate(Rx, rY_, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	shader_.use();
 	// glUniform1i(shader_("sub_divisions"), subDivisions_);	Already handled on init and key event
 
-	// 1st submesh
-	MV = glm::translate(MV, glm::vec3(-6, 0, -6));
-	glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
-	glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
+	if (instanced_) {
+		glm::mat4 V = glm::rotate(Rx, rY_, glm::vec3(0.0f, 1.0f, 0.0f)); // ex. MV
+		glm::mat4 PV = P_ * V;
 
-	// 2nd submesh
-	MV = glm::translate(MV, glm::vec3(12, 0, 0));
-	glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
-	glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
+		glUniformMatrix4fv(shader_("PV"), 1, GL_FALSE, glm::value_ptr(PV));
+		glDrawElementsInstanced(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr, 4);
+	} else {
+		glm::mat4 MV = glm::rotate(Rx, rY_, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	// 3rd submesh
-	MV = glm::translate(MV, glm::vec3(0, 0, 12));
-	glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
-	glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
+		// 1st submesh
+		MV = glm::translate(MV, glm::vec3(-6, 0, -6));
+		glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
+		glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
 
-	// 4th submesh
-	MV = glm::translate(MV, glm::vec3(-12, 0, 0));
-	glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
-	glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
+		// 2nd submesh
+		MV = glm::translate(MV, glm::vec3(12, 0, 0));
+		glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
+		glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
+
+		// 3rd submesh
+		MV = glm::translate(MV, glm::vec3(0, 0, 12));
+		glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
+		glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
+
+		// 4th submesh
+		MV = glm::translate(MV, glm::vec3(-12, 0, 0));
+		glUniformMatrix4fv(shader_("MVP"), 1, GL_FALSE, glm::value_ptr(P_ * MV));
+		glDrawElements(GL_TRIANGLES, TotalIndices, GL_UNSIGNED_SHORT, nullptr);
+	}
 
 	shader_.unuse();
 
