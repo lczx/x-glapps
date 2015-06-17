@@ -85,6 +85,7 @@
     <ClCompile Include="src\util\MouseFilter.cpp" />
     <ClCompile Include="src\util\objects\Plane.cpp" />
     <ClCompile Include="src\util\objects\RenderableObject.cpp" />
+    <ClCompile Include="src\util\objects\TexturedPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engines\chapter_1\1_GettingStarted.h" />
@@ -103,6 +104,7 @@
     <ClInclude Include="src\util\MouseFilter.h" />
     <ClInclude Include="src\util\objects\Plane.h" />
     <ClInclude Include="src\util\objects\RenderableObject.h" />
+    <ClInclude Include="src\util\objects\TexturedPlane.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\a2_triangle_frag.glsl" />
