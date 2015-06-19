@@ -82,6 +82,7 @@
     <ClCompile Include="src\ui\UISpecSelector.cpp" />
     <ClCompile Include="src\ui\GLApplication.cpp" />
     <ClCompile Include="src\util\camera\AbstractCamera.cpp" />
+    <ClCompile Include="src\util\camera\FreeCamera.cpp" />
     <ClCompile Include="src\util\GLSLShader.cpp" />
     <ClCompile Include="src\util\MouseFilter.cpp" />
     <ClCompile Include="src\util\objects\Plane.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="src\ui\UISpecSelector.h" />
     <ClInclude Include="src\ui\GLApplication.h" />
     <ClInclude Include="src\util\camera\AbstractCamera.h" />
+    <ClInclude Include="src\util\camera\FreeCamera.h" />
     <ClInclude Include="src\util\Geometry.h" />
     <ClInclude Include="src\util\glassert.h" />
     <ClInclude Include="src\util\GLSLShader.h" />
