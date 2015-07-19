@@ -15,7 +15,7 @@ public:
 	glm::vec3 getTranslation() const;
 
 	void setSpeed(const float speed);
-	const float getSpeed() const;
+	float getSpeed() const;
 
 protected:
 	// Stores the current translation (default constructs at glm::vec3(0))

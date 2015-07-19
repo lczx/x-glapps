@@ -63,7 +63,7 @@ void FreeCamera::setSpeed(const float speed)
 	speed_ = speed;
 }
 
-const float FreeCamera::getSpeed() const
+float FreeCamera::getSpeed() const
 {
 	return speed_;
 }
