@@ -22,8 +22,7 @@ const int
 	VK_Q = 0x51,
 	VK_Z = 0x5A;
 
-// Initialize OpenGL
-void FreeCamWorld::onInit()
+FreeCamWorld::FreeCamWorld() : GLEngine(GLE_REGISTER_ALL)
 {
 	GL_CHECK_ERRORS;
 

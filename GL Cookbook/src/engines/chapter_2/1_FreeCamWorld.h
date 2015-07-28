@@ -19,8 +19,7 @@ typedef CFreeCamera FreeCamera;
 class FreeCamWorld : public GLEngine
 {
 public:
-	FreeCamWorld() : GLEngine(GLE_REGISTER_ALL) { }
-	void onInit() override;
+	FreeCamWorld();
 
 private:
 	void onRender() override;
