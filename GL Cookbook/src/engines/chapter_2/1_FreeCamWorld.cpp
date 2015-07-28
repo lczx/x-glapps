@@ -4,8 +4,8 @@
 #include <math.h> /* M_PI */
 
 #include <glm/gtc/type_ptr.hpp>
-#include <SOIL.h>
-#pragma comment(lib, "SOIL.lib")
+
+#include "../../util/textureutil.h"
 
 using namespace std;
 
@@ -21,45 +21,6 @@ const int
 	VK_D = 0x44,
 	VK_Q = 0x51,
 	VK_Z = 0x5A;
-
-// LOCAL CHECKERBOARD TEXTURE LOADER
-void genCheckerboardTexture()
-{
-	// Generate the checker texture
-	//? This code may be faster if we iterate over 'i' first.
-	GLubyte data[128][128] = { 0 };
-	for (int j = 0; j < 128; ++j)
-		for (int i = 0; i < 128; ++i)
-			data[i][j] = (i <= 64 && j <= 64 || i > 64 && j > 64) ? 255 : 0;
-
-	// Allocate texture object
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 128, 128, 0, GL_RED, GL_UNSIGNED_BYTE, data);
-}
-
-// LOCAL FANCY TEXTURE LOADER
-//! (try to reuse ImageLoaderEngine::LoadTexture())
-//  watch out at texture inversion and fix clockwise vertices positioning there)
-void genFancyTexture()
-{
-	string txPath = "assets/fancytexture.png";
-
-	int txW = 0, txH = 0, txCh = 0;
-	GLubyte *pData = SOIL_load_image(txPath.c_str(), &txW, &txH, &txCh, SOIL_LOAD_AUTO);
-	// cout << txW << ' ' << txH << ' ' << txCh << '\n';
-
-	if (!pData) {
-		cerr << "Cannot load image: " << txPath.c_str() << endl;
-		// No exit, so we can see the error...
-	}
-
-	// IMAGE IS NOT FLIPPED!
-
-	// If using texture with alpha (level in photoshop), use GL_RGBA instead
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, txW, txH, 0, GL_RGB, GL_UNSIGNED_BYTE, pData);
-
-	// Free SOIL image data
-	SOIL_free_image_data(pData);
-}
 
 // Initialize OpenGL
 void FreeCamWorld::onInit()
@@ -88,7 +49,8 @@ void FreeCamWorld::onInit()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
 
 	// Generate and allocate texture object
-	genFancyTexture();
+	LoadTexture("assets/fancytexture.png");
+	//GenCheckerboardTexture(); // To show monochrome, edit fragment shader in 'TexturedPlane'
 
 	// Generate mipmaps
 	glGenerateMipmap(GL_TEXTURE_2D);
@@ -99,7 +61,7 @@ void FreeCamWorld::onInit()
 	GL_CHECK_ERRORS;
 
 	// Setup camera: position and look direction
-	glm::vec3 p = glm::vec3(5);
+	glm::vec3 p = glm::vec3(-5, 5, 5);
 	cam.setPosition(p);
 	glm::vec3 look = glm::normalize(p);
 

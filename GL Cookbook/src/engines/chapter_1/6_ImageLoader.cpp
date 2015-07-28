@@ -1,12 +1,8 @@
 ﻿#include "6_ImageLoader.h"
 
-#include <string>
+#include "../../util/textureutil.h"
 
-#include <SOIL.h>
-#pragma comment(lib, "SOIL.lib")
-
-ImageLoaderEngine::ImageLoaderEngine(const char* texturePath)
-	: GLEngine(GLE_REGISTER_DISPLAY), texturePath_(texturePath)
+ImageLoaderEngine::ImageLoaderEngine(const char* texturePath) : GLEngine(GLE_REGISTER_DISPLAY)
 {
 	GL_CHECK_ERRORS;
 
@@ -46,7 +42,19 @@ ImageLoaderEngine::ImageLoaderEngine(const char* texturePath)
 	glVertexAttribPointer(shader_["vVertex"], 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 	GL_CHECK_ERRORS;
 
-	loadTexture();
+	// Set up the OpenGL texture object and bind to texture unit 0
+	glGenTextures(1, &textureID_);
+	glActiveTexture(GL_TEXTURE0); // Set active texture unit to 0
+	glBindTexture(GL_TEXTURE_2D, textureID_);
+
+	// Set texture parameters
+	//   filtering for minification / magnification and wrapping modes for S and T coordinates
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	LoadTexture(texturePath);
 	GL_CHECK_ERRORS;
 
 	std::cout << "Initialization successful\n";
@@ -83,49 +91,4 @@ void ImageLoaderEngine::onShutdown()
 	glDeleteTextures(1, &textureID_);
 
 	std::cout << "Shutdown successful\n";
-}
-
-void ImageLoaderEngine::loadTexture()
-{
-	// Load the image using SOIL
-	int textureWidth = 0, textureHeight = 0, textureChannels = 0;
-	// Here, 'SOIL_LOAD_AUTO' keeps all loading settings to default
-	GLubyte *pData = SOIL_load_image(texturePath_.c_str(),
-		&textureWidth, &textureHeight, &textureChannels, SOIL_LOAD_AUTO);
-
-	if (pData == nullptr) { // If it fails, returns NULL
-		std::cerr << "Cannot load image: " << texturePath_ << std::endl;
-		assert(pData != nullptr, "Cannot load texture image");
-		exit(EXIT_FAILURE);
-	}
-
-	// Vertically flip the image on Y axis since it is inverted
-	for (int j = 0; 2 * j < textureHeight; ++j) {
-		int index1 = j * textureWidth * textureChannels;
-		int index2 = (textureHeight - 1 - j) * textureWidth * textureChannels;
-		for (int i = textureWidth * textureChannels; i > 0; --i) {
-			std::swap(pData[index1], pData[index2]);
-			++index1, ++index2;
-		}
-	}
-
-	// Set up the OpenGL texture object and bind to texture unit 0
-	glGenTextures(1, &textureID_);
-	glActiveTexture(GL_TEXTURE0); // Set active texture unit to 0
-	glBindTexture(GL_TEXTURE_2D, textureID_);
-
-	// Set texture parameters
-	//   filtering for minification / magnification and wrapping modes for S and T coordinates
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-	// Allocate texture
-	//   (target, mipmap, internal_fmt, w, h, border, image_fmt, ptr_fmt, data)
-	//   internal_fmt by image properties
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, pData);
-
-	// Free SOIL image data
-	SOIL_free_image_data(pData);
 }

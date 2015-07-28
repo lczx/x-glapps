@@ -19,12 +19,6 @@ private:
 	static const int TotalVertices = 4;
 	static const int TotalIndices = 6;
 
-	// Texture loading utility
-	void loadTexture();
-
-	// Texture image filename
-	std::string texturePath_;
-
 	// Geometry and shader reference
 	Geometry geom_;
 	GLSLShader shader_;
