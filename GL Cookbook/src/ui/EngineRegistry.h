@@ -11,6 +11,8 @@
 #include "../engines/chapter_1/4_Subdivision.h"
 #include "../engines/chapter_1/6_ImageLoader.h"
 
+#include "../engines/chapter_2/1_FreeCamWorld.h"
+
 typedef std::map<std::string, std::vector<EngineSpec>> EngineRegistryData;
 
 class EngineRegistry
@@ -38,6 +40,10 @@ private:
 			{ "Plane subdivision", [] { return new SubdivisionEngine(false); } },
 			{ "Plane subdivision, instanced", [] { return new SubdivisionEngine(true);  } },
 			{ "Image Loader", [] { return new ImageLoaderEngine("assets/puerto_pollo.png"); } }
+		};
+
+		engines_["Chapter 2"] = {
+			{ "Free Camera world", [] { return new FreeCamWorld(); } }
 		};
 	}
 

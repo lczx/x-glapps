@@ -77,6 +77,7 @@
     <ClCompile Include="src\engines\chapter_1\3_RippleDeformer.cpp" />
     <ClCompile Include="src\engines\chapter_1\4_Subdivision.cpp" />
     <ClCompile Include="src\engines\chapter_1\6_ImageLoader.cpp" />
+    <ClCompile Include="src\engines\chapter_2\1_FreeCamWorld.cpp" />
     <ClCompile Include="src\engines\GLEngine.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ui\UISpecSelector.cpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="src\engines\chapter_1\3_RippleDeformer.h" />
     <ClInclude Include="src\engines\chapter_1\4_Subdivision.h" />
     <ClInclude Include="src\engines\chapter_1\6_ImageLoader.h" />
+    <ClInclude Include="src\engines\chapter_2\1_FreeCamWorld.h" />
     <ClInclude Include="src\engines\GLEngine.h" />
     <ClInclude Include="src\ui\EngineRegistry.h" />
     <ClInclude Include="src\ui\EngineSpec.h" />
